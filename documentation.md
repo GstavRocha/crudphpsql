@@ -2,5 +2,8 @@
 ### PhpAdmin
 Create view list all record companies.
 
+1 - Qst:
+
 CREATE VIEW listaGravadoras
-SELECT * FROM tbgravadora;
+as
+SELECT * FROM tbgravadora; 
