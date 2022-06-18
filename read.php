@@ -1,38 +1,42 @@
 <?php
-    if(isset($GET["id"]) && !empty(trim($_GET["id"]))){
-        require_once "conexao.php";
-        try{
-            $conn = conectar();
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            $CodGrav = trim($_GET["id"]);
-            $sql = 'CALL splistaGravadoras(?)';
-            $stm = $conn->prepare($sql);
-            $stm->bindParam(1,$CoGrav,PDO::PARAM_INT,10);
-            $stm->execute();
-            $row = $stm->fetch();
+	// Verifica se foi enviado o ID do músico
+	if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
+		require_once "conexao.php";
+		
+		try {
+			  $conn = conectar();
+			  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $codigoGravadora = $row['CodGrav'];
-            $nomeGravadora = $row['NoGravadora'];
-            $site = $row['TxSite'];
-        } catch(PDOException $e){
-            echo 'ERRO: '.$e->getMessage();
-        }
-    }
+			  $codConsult = trim($_GET["id"]);	
+			  $sql = 'CALL spListaGravadoras(?)';
+			  $stm = $conn->prepare($sql);
+			  $stm->bindParam(1, $codConsult, PDO::PARAM_INT, 10);
+			  $stm->execute();
+              $row = $stm->fetch();
+              
 
+			  $codigo  = $row["CoGravadora"];
+              $gravadora = $row["NoGravadora"];
+              $site = $row["TxSite"];
+
+		} catch(PDOException $e) {
+			echo 'ERRO: ' . $e->getMessage();
+		}
+	}
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    
+  
+    <title>Consulta Gravadora</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body class="bg-dark text-center">
-    <h1 class="text-light">Listagem dos Músicos e da Gravadora</h1>
+    <h1 class="text-light">Consultar <?php echo $gravadora; ?></h1>
     <div class="d-flex justify-content-center">
         <div class="d-flex justify-content-center flex-sm-col bg-light">
             <div class="wrapper">
@@ -40,19 +44,15 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Nome Gravadora</label>
-                                <p><b><?php echo $nomeGravadora; ?></b></p>
+                            <p><b>Gravadora: <?php echo $gravadora; ?></b></p>
                             </div>
                             <div class="form-group">
-                                <label>Site</label>
-                                <p><b><?php echo $site; ?></b></p>
+                            <p><b>Site: <?php echo $site; ?></b></p>
                             </div>
-                        </div>
                             <p><a href="index.php" class="btn btn-primary">Voltar</a></p>
                         </div>
                     </div>        
                 </div>
-    </div>
             </div>
 
         </div>

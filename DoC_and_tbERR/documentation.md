@@ -18,7 +18,7 @@ ON p.CoPessoa = g.CoGravadora;
 Consultar Gravadoras
 CREATE VIEW consultGravadora
 as
-SELECT c.CoGravadora,p.NoPessoa, c.TxTituloCD, c.NuAno FROM tbcd as c 
+SELECT c.CoGravadora,p.NoPessoa AS NoGravadora , c.TxTituloCD, c.NuAno FROM tbcd as c 
 INNER JOIN tbgravadora as g 
 ON g.CoGravadora = c.CoGravadora
 INNER JOIN tbpessoa as p 
@@ -54,3 +54,13 @@ DELIMITER ;
 CREATE VIEW listaGravadoras
 as
 SELECT * FROM tbgravadora; 
+
+PAREI AQUI//
+
+DELIMITER $$
+CREATE PROCEDURE spIncluirAlterarGravadora (in CoGrav INT, in NoGrav VARCHAR, in TxSit VARCHAR(50))
+BEGIN
+	IF(CoGrav = 0) THEN
+    	SELECT MAX(CoGravadora) INTO CoGrav FROM tbgravadora as g 
+        INNER JOIN tbpessoa as p 
+        ON p.CoPessoa = g.CoGravadora WHERE p.NoPessoa(INSERT INTO 
