@@ -49,48 +49,73 @@ BEGIN
 END $$
 DELIMITER ;
 
-Delete Gravadora:
+Delete Gravadora: 
+A tabela tem chaves que herdam é necessário deletar todos os cantos onde ela foi chamada; -- não deu certo
 DELIMITER $$
 CREATE PROCEDURE spGravadoraDel(IN codDel INT)
 BEGIN
-   DELETE FROM TbMusico WHERE CoMusico = codDel;
-   DELETE FROM TbPessoa WHERE CoPessoa = codDel;
+   	DELETE FROM tbgravadora WHERE CoGravadora = codDel;
+    DELETE FROM tbpessoa WHERE CoPessoa = codDel;
 END $$
 DELIMITER ;
 
-Incluir e Alterar Gravadora:
+A Chave estrangeira da Tabela tbgravadora foi mudada para ON DELETE CASCADE, Abaixo segue o código.
+
+ALTER TABLE tbgravadora DROP FOREIGN KEY tbgravadora_ibfk_1; ALTER TABLE tbgravadora ADD CONSTRAINT tbgravadora_ibfk_1 FOREIGN KEY (CoGravadora) REFERENCES tbpessoa(CoPessoa) ON DELETE CASCADE ON UPDATE CASCADE;
+
+DEU CERTO
+Incluir Gravadora:
 DELIMITER $$
-CREATE PROCEDURE spGravadoraAltera (in codGrav SMALLINT, in nomeGrav VARCHAR(50), in site VARCHAR(50))
+CREATE PROCEDURE spGravadoraIncluiAltera(IN codGravadora INT, IN nomeGravadora VARCHAR(50), in siteGravadora VARCHAR(50))
 BEGIN
-	IF(codGrav = 0) THEN
-    	SELECT MAX(CoPessoa) INTO codGrav FROM tbpessoa;
-        INSERT INTO tbpessoa(CoPessoa,NoPessoa,InTipoPessoa)
-        VALUES(codGrav + 1,nomeGrav,2);
-        INSERT INTO tbgravadora(CoGravadora,TxSite)
-        VALUES(codGrav + 1, site);
+    IF (codGravadora = 0) THEN
+      SELECT MAX(CoPessoa) INTO codGravadora FROM tbpessoa;
+
+     
+      INSERT INTO tbpessoa(CoPessoa, NoPessoa, InTipoPessoa)
+      VALUES (codGravadora + 1, nomeGravadora, 2);
+
+      INSERT INTO listaGravadoras(CoGravadora, TxSite)
+      VALUES (codGravadora + 1, siteGravadora);
     ELSE
-    	UPDATE tbpessoa
-        SET NoPessoa = nomeGrav
-        WHERE CoPesoa = codGrav;
-        
-        UPDATE tbgravadora
-        SET TxSite = site
-        WHERE CoGravadora = codGrav;
-   END IF;
- END $$
- DELIMITER ;
+      UPDATE tbpessoa
+         SET NoPessoa = nomeGravadora
+       WHERE CoPessoa = codGravadora;
+
+      UPDATE listaGravadoras
+         SET TxSite = siteGravadora
+       WHERE CoGravadora  = codGravadora;
+    END IF;
+END $$
+DELIMITER ;
+
+Meu Procedure
+DELIMITER $$
+CREATE PROCEDURE spGravadoraIncluiAltera(IN codGravadora INT, IN nomeGravadora VARCHAR(50), in siteGravadora VARCHAR(50))
+BEGIN
+    IF (codGravadora = 0) THEN
+      SELECT MAX(CoPessoa) INTO codGravadora FROM tbpessoa;
+     
+      INSERT INTO tbpessoa(CoPessoa, NoPessoa, InTipoPessoa)
+      VALUES (codGravadora + 1, nomeGravadora, 2);
+
+      INSERT INTO tbgravadora(CoGravadora, TxSite)
+      VALUES (codGravadora + 1, siteGravadora);
+    ELSE
+      UPDATE tbpessoa
+         SET NoPessoa = nomeGravadora
+       WHERE CoPessoa = codGravadora;
+
+      UPDATE tbgravadora
+         SET TxSite = siteGravadora
+       WHERE CoGravadora  = codGravadora;
+    END IF;
+END $$
+DELIMITER ;
+
 1 - Qst:
 
 CREATE VIEW listaGravadoras
 as
 SELECT * FROM tbgravadora; 
 
-PAREI AQUI//
-
-DELIMITER $$
-CREATE PROCEDURE spIncluirAlterarGravadora (in CoGrav INT, in NoGrav VARCHAR, in TxSit VARCHAR(50))
-BEGIN
-	IF(CoGrav = 0) THEN
-    	SELECT MAX(CoGravadora) INTO CoGrav FROM tbgravadora as g 
-        INNER JOIN tbpessoa as p 
-        ON p.CoPessoa = g.CoGravadora WHERE p.NoPessoa(INSERT INTO 
