@@ -49,6 +49,36 @@ BEGIN
 END $$
 DELIMITER ;
 
+Delete Gravadora:
+DELIMITER $$
+CREATE PROCEDURE spGravadoraDel(IN codDel INT)
+BEGIN
+   DELETE FROM TbMusico WHERE CoMusico = codDel;
+   DELETE FROM TbPessoa WHERE CoPessoa = codDel;
+END $$
+DELIMITER ;
+
+Incluir e Alterar Gravadora:
+DELIMITER $$
+CREATE PROCEDURE spGravadoraAltera (in codGrav SMALLINT, in nomeGrav VARCHAR(50), in site VARCHAR(50))
+BEGIN
+	IF(codGrav = 0) THEN
+    	SELECT MAX(CoPessoa) INTO codGrav FROM tbpessoa;
+        INSERT INTO tbpessoa(CoPessoa,NoPessoa,InTipoPessoa)
+        VALUES(codGrav + 1,nomeGrav,2);
+        INSERT INTO tbgravadora(CoGravadora,TxSite)
+        VALUES(codGrav + 1, site);
+    ELSE
+    	UPDATE tbpessoa
+        SET NoPessoa = nomeGrav
+        WHERE CoPesoa = codGrav;
+        
+        UPDATE tbgravadora
+        SET TxSite = site
+        WHERE CoGravadora = codGrav;
+   END IF;
+ END $$
+ DELIMITER ;
 1 - Qst:
 
 CREATE VIEW listaGravadoras

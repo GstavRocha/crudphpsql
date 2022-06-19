@@ -13,6 +13,7 @@
 </head>
 <body class="bg-dark text-center">
     <h1 class="text-light">Listagem dos Músicos e da Gravadora</h1>
+    <a href="create.php" class="btn btn-danger pull-right"><i class="fa fa-plus"></i>   Incluir Gravadoras</a>
     <div class="d-flex justify-content-center">
         <div class="d-flex justify-content-center flex-sm-col bg-light">
             <div class="p-2"><a href="">Musicos</a></div>
