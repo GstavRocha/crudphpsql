@@ -63,8 +63,9 @@ A Chave estrangeira da Tabela tbgravadora foi mudada para ON DELETE CASCADE, Aba
 
 ALTER TABLE tbgravadora DROP FOREIGN KEY tbgravadora_ibfk_1; ALTER TABLE tbgravadora ADD CONSTRAINT tbgravadora_ibfk_1 FOREIGN KEY (CoGravadora) REFERENCES tbpessoa(CoPessoa) ON DELETE CASCADE ON UPDATE CASCADE;
 
-DEU CERTO
+
 Incluir Gravadora:
+Uma na view outra direto na tabela.
 DELIMITER $$
 CREATE PROCEDURE spGravadoraIncluiAltera(IN codGravadora INT, IN nomeGravadora VARCHAR(50), in siteGravadora VARCHAR(50))
 BEGIN
@@ -119,28 +120,4 @@ CREATE VIEW listaGravadoras
 as
 SELECT * FROM tbgravadora; 
 
-Corrigindo procedure
-
-BEGIN
-    IF (codGravadora = 0) THEN
-      SELECT MAX(CoPessoa) INTO codGravadora FROM tbpessoa;
-     
-      INSERT INTO tbpessoa(CoPessoa, NoPessoa, InTipoPessoa)
-      VALUES (codGravadora + 1, nomeGravadora, 2);
-
-      INSERT INTO tbgravadora(CoGravadora, TxSite)
-      VALUES (codGravadora + 1, siteGravadora);
-    ELSE
-      UPDATE tbpessoa
-         SET NoPessoa = nomeGravadora
-       WHERE CoPessoa = codGravadora;
-
-      UPDATE tbgravadora
-         SET TxSite = siteGravadora
-       WHERE CoGravadora  = codGravadora;
-       
-       UPDATE listaGravadoras
-         SET TxSite = nome
-       WHERE CoGravadora  = codGravadora;
-    END IF;
-END
+  

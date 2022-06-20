@@ -32,7 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 		  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		  $cod = 0;	
-		  $sql = 'CALL spGravadoraAlterAdd(?, ?, ?)';
+		  $sql = 'CALL spGravadoraIncluiAltera(?, ?, ?)';
 		  $stm = $conn->prepare($sql);
 		  $stm->bindParam(1, $cod, PDO::PARAM_INT, 10);
 		  $stm->bindParam(2, $nome, PDO::PARAM_STR, 50);
