@@ -119,3 +119,28 @@ CREATE VIEW listaGravadoras
 as
 SELECT * FROM tbgravadora; 
 
+Corrigindo procedure
+
+BEGIN
+    IF (codGravadora = 0) THEN
+      SELECT MAX(CoPessoa) INTO codGravadora FROM tbpessoa;
+     
+      INSERT INTO tbpessoa(CoPessoa, NoPessoa, InTipoPessoa)
+      VALUES (codGravadora + 1, nomeGravadora, 2);
+
+      INSERT INTO tbgravadora(CoGravadora, TxSite)
+      VALUES (codGravadora + 1, siteGravadora);
+    ELSE
+      UPDATE tbpessoa
+         SET NoPessoa = nomeGravadora
+       WHERE CoPessoa = codGravadora;
+
+      UPDATE tbgravadora
+         SET TxSite = siteGravadora
+       WHERE CoGravadora  = codGravadora;
+       
+       UPDATE listaGravadoras
+         SET TxSite = nome
+       WHERE CoGravadora  = codGravadora;
+    END IF;
+END

@@ -16,7 +16,6 @@
     <a href="create.php" class="btn btn-danger pull-right"><i class="fa fa-plus"></i>   Incluir Gravadoras</a>
     <div class="d-flex justify-content-center">
         <div class="d-flex justify-content-center flex-sm-col bg-light">
-            <div class="p-2"><a href="">Musicos</a></div>
                 <div class="d-flex flex-sm-col">
                     <?php
                     require_once "conexao.php";
@@ -62,7 +61,6 @@
                     ?>
                 </div>
             <div class="d-flex justify-content-center flex-sm-col bg-light">
-            <div class="p-2"><a href="read.php">Gravadoras</a></div>
         </div>
     </div>
     <script>

@@ -1,11 +1,8 @@
 <?php
 require_once "conexao.php";
 
-$codigo = "";
 $nome = "";
 $site = "";
-
-$codigo_err = "";
 $nome_err = "";
 $site_err = "";
 
@@ -31,7 +28,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
             $conn = conectar();
             $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 
-            $sql = 'CALL spGravadoraAltera(?, ?, ?)';
+            $sql = 'CALL spGravadoraIncluiAltera(?, ?, ?)';
             $stm = $conn->prepare($sql);
             $stm->bindParam(1, $id, PDO::PARAM_INT,10);
             $stm->bindParam(2, $nome,PDO::PARAM_STR,50);
@@ -45,7 +42,6 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
         }
     }
 }else{
-    // Check existence of id parameter before processing further
     if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
 		$id = $_GET["id"];
 		try {
@@ -53,7 +49,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
 			  $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 			  $cod = trim($_GET["id"]);	
-			  $sql = 'CALL splistaGravadoras(?)';
+			  $sql = 'CALL 	spListaGravadoras(?)';
 			  $stm = $conn->prepare($sql);
 			  $stm->bindParam(1, $cod, PDO::PARAM_INT, 10);
 			  $stm->execute();
@@ -91,13 +87,13 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                     <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" method="post">
                         <div class="form-group">
                             <label>Nome</label>
-                            <input type="text" name="name" class="form-control <?php echo (!empty($nome_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $nome; ?>">
+                            <input type="text" name="nome" class="form-control <?php echo (!empty($nome_err)) ? 'is-valid' : ''; ?>" value="<?php echo $nome; ?>">
                             <span class="invalid-feedback"><?php echo $nome_err;?></span>
                         </div>
 						<div class="form-group">
                             <label>Site</label>
-                            <input type="text" name="vocal" class="form-control <?php echo (!empty($vocal_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $vocal; ?>">
-                            <span class="invalid-feedback"><?php echo $vocal_err;?></span>
+                            <input type="text" name="site" class="form-control <?php echo (!empty($site_err)) ? 'is-valid' : ''; ?>" value="<?php echo $site; ?>">
+                            <span class="invalid-feedback"><?php echo $site_err;?></span>
                         </div>
                         <input type="hidden" name="id" value="<?php echo $id; ?>"/>
                         <input type="submit" class="btn btn-primary" value="Submit">
